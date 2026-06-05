@@ -7,7 +7,33 @@ Task: **Regression** | Metric: **RMSE + R² + MAE**
 > **Design note:** the dataset also contains co-pollutants (PM10, CO, NO2, SO2, O3). We **deliberately
 > exclude them** as predictors — they are co-emitted symptoms of the same sources, not weather, and are
 > unavailable at forecast time (using them is practical target leakage). The notebook's ablation section
-> quantifies this (R² 0.59 → 0.94). The deployed model uses **weather only**.
+> quantifies this (R² 0.47 → 0.94). The deployed model uses **weather only**.
+
+---
+
+## For the reviewer — clone & reproduce (no questions needed)
+
+```bash
+git clone https://github.com/DiasSarkytbayev1/Air_quality_index.git
+cd Air_quality_index
+python -m venv .venv && .venv/Scripts/activate     # Windows; use source .venv/bin/activate on macOS/Linux
+pip install -r requirements.txt
+
+# 1) Pull data + trained model artifacts from Google Drive (DVC is already configured)
+dvc pull
+#    A browser opens for Google sign-in. On the "Google hasn't verified this app" screen,
+#    click  Advanced -> Go to dvc-aqi (unsafe)  — it is our own OAuth app, this is expected.
+
+# 2) Reproduce the best run end-to-end (Optuna + MLflow, writes models/best_model.pkl)
+python -m src.train
+
+# 3) Serve it and open the Swagger UI
+uvicorn serving.app:app --reload      # then open http://localhost:8000/docs
+```
+
+`dvc pull` already restores `data/beijing_air_quality.csv` and the model files, so you do **not** need to
+download anything manually. Final honest metrics (time-based split, meteorology only):
+**R² ≈ 0.48, RMSE ≈ 60, MAE ≈ 41 µg/m³**.
 
 ---
 
@@ -74,7 +100,7 @@ Run all cells. The notebook:
 python -m src.train
 ```
 
-This runs 50 Optuna trials to find the best XGBoost hyperparameters,  
+This runs 30 Optuna trials to find the best XGBoost hyperparameters,  
 logs all experiments to MLflow, and saves the final model.
 
 **View MLflow UI:**
@@ -85,17 +111,20 @@ Then open http://localhost:5000
 
 ---
 
-## Step 3 — DVC Setup (artifact versioning on Google Drive)
+## Step 3 — DVC artifact versioning (Google Drive)
 
+DVC is **already configured** in this repo (`.dvc/config` points to the Google Drive remote and
+includes the OAuth client). Reviewers only need `dvc pull` (see the top section).
+
+To re-version artifacts after retraining (project owner only):
 ```bash
-dvc init
-dvc remote add -d gdrive gdrive://<YOUR_GDRIVE_FOLDER_ID>
-dvc add data/train.csv models/best_model.pkl models/preprocessor.pkl models/feature_names.json
-git add .dvc data/.gitignore models/.gitignore
+dvc add data/beijing_air_quality.csv models/best_model.pkl models/preprocessor.pkl models/feature_names.json
+git add data/*.dvc models/*.dvc
 dvc push
+git commit -m "Update artifacts"
 ```
 
-Share your Google Drive folder with `aaaksenova2@gmail.com` (Viewer).
+The Google Drive folder is shared with `aaaksenova2@gmail.com` (Viewer access).
 
 ---
 
@@ -143,7 +172,8 @@ uvicorn serving.app:app --reload
 | Choice | Why |
 |--------|-----|
 | Target = PM2.5 | Most health-critical pollutant; physically driven by weather |
-| Exclude co-pollutants | Co-emitted symptoms, not weather; unavailable at forecast time (leakage). Ablation: R² 0.59→0.94 |
+| Exclude co-pollutants | Co-emitted symptoms, not weather; unavailable at forecast time (leakage). Ablation: R² 0.47→0.94 |
+| Time-based split (not random) | Hourly data is autocorrelated; random split leaks the neighbouring hour (R² 0.92→0.48). We report the honest future-forecast score |
 | RMSE as primary metric | Penalises large errors more — important for public health alerts |
 | XGBoost over Linear Regression | Non-linear weather→PM2.5 relationships, skewed target, feature interactions |
 | Optuna for HP tuning | Bayesian optimisation finds better params than grid search in fewer trials |

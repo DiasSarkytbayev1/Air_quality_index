@@ -18,3 +18,4 @@ ipykernel>=6.0.0
 dvc>=3.40.0
 dvc-gdrive>=2.20.0
 python-multipart>=0.0.6
+ucimlrepo>=0.0.7
