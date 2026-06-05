@@ -33,7 +33,7 @@ uvicorn serving.app:app --reload      # then open http://localhost:8000/docs
 
 `dvc pull` already restores `data/beijing_air_quality.csv` and the model files, so you do **not** need to
 download anything manually. Final honest metrics (time-based split, meteorology only):
-**R² ≈ 0.48, RMSE ≈ 60, MAE ≈ 41 µg/m³**.
+**R² ≈ 0.47, RMSE ≈ 60, MAE ≈ 41 µg/m³** (reproducible — Optuna is seeded).
 
 ---
 
@@ -151,7 +151,7 @@ curl -X POST http://localhost:8000/predict -H "Content-Type: application/json" \
 This pair demonstrates the core physics: **wind disperses particles**. Change one variable at a
 time in the demo — changing several at once mixes effects and can mask the trend.
 
-**Final metrics (honest time-based split, meteorology only):** RMSE ≈ 60, MAE ≈ 41, **R² ≈ 0.48**.
+**Final metrics (honest time-based split, meteorology only):** RMSE ≈ 60, MAE ≈ 41, **R² ≈ 0.47**.
 
 ---
 
@@ -173,7 +173,7 @@ uvicorn serving.app:app --reload
 |--------|-----|
 | Target = PM2.5 | Most health-critical pollutant; physically driven by weather |
 | Exclude co-pollutants | Co-emitted symptoms, not weather; unavailable at forecast time (leakage). Ablation: R² 0.47→0.94 |
-| Time-based split (not random) | Hourly data is autocorrelated; random split leaks the neighbouring hour (R² 0.92→0.48). We report the honest future-forecast score |
+| Time-based split (not random) | Hourly data is autocorrelated; random split leaks the neighbouring hour (R² 0.92→0.47). We report the honest future-forecast score |
 | RMSE as primary metric | Penalises large errors more — important for public health alerts |
 | XGBoost over Linear Regression | Non-linear weather→PM2.5 relationships, skewed target, feature interactions |
 | Optuna for HP tuning | Bayesian optimisation finds better params than grid search in fewer trials |

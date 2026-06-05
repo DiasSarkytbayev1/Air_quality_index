@@ -76,7 +76,8 @@ def train(config_path: str = "config.yaml"):
     mlflow.set_experiment(cfg["mlflow"]["experiment_name"])
 
     print(f"Running Optuna ({cfg['optuna']['n_trials']} trials)...")
-    study = optuna.create_study(direction=cfg["optuna"]["direction"])
+    sampler = optuna.samplers.TPESampler(seed=cfg["data"]["random_state"])
+    study = optuna.create_study(direction=cfg["optuna"]["direction"], sampler=sampler)
     study.optimize(
         lambda t: objective(t, X_train, y_train, X_val, y_val, preprocessor),
         n_trials=cfg["optuna"]["n_trials"],

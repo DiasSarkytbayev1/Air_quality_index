@@ -8827,18 +8827,18 @@ Final shape: (412029, 36)  |  n_features: 35
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=c98b8628">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=c98b8628">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [13]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">BEST_PARAMS</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">'n_estimators'</span><span class="p">:</span> <span class="mi">800</span><span class="p">,</span> <span class="s1">'max_depth'</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">'learning_rate'</span><span class="p">:</span> <span class="mf">0.0538</span><span class="p">,</span>
-    <span class="s1">'subsample'</span><span class="p">:</span> <span class="mf">0.577</span><span class="p">,</span> <span class="s1">'colsample_bytree'</span><span class="p">:</span> <span class="mf">0.935</span><span class="p">,</span>
-    <span class="s1">'reg_alpha'</span><span class="p">:</span> <span class="mf">5.4e-06</span><span class="p">,</span> <span class="s1">'reg_lambda'</span><span class="p">:</span> <span class="mf">0.656</span><span class="p">,</span>
+    <span class="s1">'n_estimators'</span><span class="p">:</span> <span class="mi">350</span><span class="p">,</span> <span class="s1">'max_depth'</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">'learning_rate'</span><span class="p">:</span> <span class="mf">0.0633</span><span class="p">,</span>
+    <span class="s1">'subsample'</span><span class="p">:</span> <span class="mf">0.570</span><span class="p">,</span> <span class="s1">'colsample_bytree'</span><span class="p">:</span> <span class="mf">0.901</span><span class="p">,</span>
+    <span class="s1">'reg_alpha'</span><span class="p">:</span> <span class="mf">4.7e-08</span><span class="p">,</span> <span class="s1">'reg_lambda'</span><span class="p">:</span> <span class="mf">7.62</span><span class="p">,</span>
     <span class="s1">'tree_method'</span><span class="p">:</span> <span class="s1">'hist'</span><span class="p">,</span> <span class="s1">'random_state'</span><span class="p">:</span> <span class="n">RANDOM_STATE</span><span class="p">,</span>
 <span class="p">}</span>
 <span class="n">X_trainval</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">X_train</span><span class="p">,</span> <span class="n">X_val</span><span class="p">])</span>
@@ -8849,37 +8849,17 @@ Final shape: (412029, 36)  |  n_features: 35
 <span class="n">xgb_rmse</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">mean_squared_error</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">xgb_preds</span><span class="p">)))</span>
 <span class="n">xgb_mae</span>  <span class="o">=</span> <span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">xgb_preds</span><span class="p">)</span>
 <span class="n">xgb_r2</span>   <span class="o">=</span> <span class="n">r2_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">xgb_preds</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">'=== Improved: XGBoost (Optuna-tuned, meteorology only) ==='</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'  RMSE : </span><span class="si">{</span><span class="n">xgb_rmse</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="se">\n</span><span class="s1">  MAE  : </span><span class="si">{</span><span class="n">xgb_mae</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="se">\n</span><span class="s1">  R2   : </span><span class="si">{</span><span class="n">xgb_r2</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="se">\n</span><span class="s1">Gain over baseline:  RMSE -</span><span class="si">{</span><span class="p">(</span><span class="n">bl_rmse</span><span class="o">-</span><span class="n">xgb_rmse</span><span class="p">)</span><span class="o">/</span><span class="n">bl_rmse</span><span class="o">*</span><span class="mi">100</span><span class="si">:</span><span class="s1">.1f</span><span class="si">}</span><span class="s1">%   R2 +</span><span class="si">{</span><span class="n">xgb_r2</span><span class="o">-</span><span class="n">bl_r2</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">'</span><span class="se">\n</span><span class="s1">&gt;&gt;&gt; NOTE: hyperparameters come from the Optuna search in src/train.py, tuned on the'</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">'    validation period. The final model is refit on train+val (all data BEFORE the test'</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">'    period), exactly like the production pipeline - so this R2 matches src/train.py.'</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">'    Optuna chose max_depth=4 (shallow): on the honest time split deep trees just overfit.'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"=== Improved: XGBoost (Optuna-tuned, meteorology only) ==="</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  RMSE : </span><span class="si">{</span><span class="n">xgb_rmse</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span>
+  <span class="n">MAE</span>  <span class="p">:</span> <span class="p">{</span><span class="n">xgb_mae</span><span class="p">:</span><span class="mf">.4</span><span class="n">f</span><span class="p">}</span>
+  <span class="n">R2</span>   <span class="p">:</span> <span class="p">{</span><span class="n">xgb_r2</span><span class="p">:</span><span class="mf">.4</span><span class="n">f</span><span class="p">}</span><span class="s2">")</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span>
+<span class="n">Gain</span> <span class="n">over</span> <span class="n">baseline</span><span class="p">:</span>  <span class="n">RMSE</span> <span class="o">-</span><span class="p">{(</span><span class="n">bl_rmse</span><span class="o">-</span><span class="n">xgb_rmse</span><span class="p">)</span><span class="o">/</span><span class="n">bl_rmse</span><span class="o">*</span><span class="mi">100</span><span class="p">:</span><span class="mf">.1</span><span class="n">f</span><span class="p">}</span><span class="o">%</span>   <span class="n">R2</span> <span class="o">+</span><span class="p">{</span><span class="n">xgb_r2</span><span class="o">-</span><span class="n">bl_r2</span><span class="p">:</span><span class="mf">.4</span><span class="n">f</span><span class="p">}</span><span class="s2">")</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">NOTE</span><span class="p">:</span> <span class="n">hyperparameters</span> <span class="n">come</span> <span class="kn">from</span><span class="w"> </span><span class="nn">the</span> <span class="n">SEEDED</span> <span class="n">Optuna</span> <span class="n">search</span> <span class="ow">in</span> <span class="n">src</span><span class="o">/</span><span class="n">train</span><span class="o">.</span><span class="n">py</span> <span class="p">(</span><span class="mi">30</span> <span class="n">trials</span><span class="p">)</span><span class="o">.</span><span class="s2">")</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"    Final model refit on train+val, like production -&gt; R2 matches src/train.py (~0.47)"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"    and is fully REPRODUCIBLE: same seed gives the same result every run."</span><span class="p">)</span>
 </pre></div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>=== Improved: XGBoost (Optuna-tuned, meteorology only) ===
-  RMSE : 60.5892
-  MAE  : 41.6440
-  R2   : 0.4724
-
-Gain over baseline:  RMSE -17.3%   R2 +0.2437
-
-&gt;&gt;&gt; NOTE: hyperparameters come from the Optuna search in src/train.py, tuned on the
-    validation period. The final model is refit on train+val (all data BEFORE the test
-    period), exactly like the production pipeline - so this R2 matches src/train.py.
-    Optuna chose max_depth=4 (shallow): on the honest time split deep trees just overfit.
-</pre>
 </div>
 </div>
 </div>
